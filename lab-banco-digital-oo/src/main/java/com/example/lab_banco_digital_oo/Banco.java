@@ -33,6 +33,18 @@ public class Banco {
 	public void addClientes(Cliente cliente) {
 		this.clientes.add(cliente);
 	}
-	
 
+	public Conta getContaPorNumero(int numeroContaDeposito) {
+
+		for (Conta conta : contas) {
+
+			if (conta.getAgencia() == Conta.AGENCIA_PADRAO && conta.getNumero() == numeroContaDeposito) {
+				return conta;
+			} else {
+				System.out.println("Conta não encontrada.");
+			}
+		}
+		return null;
+
+	}
 }

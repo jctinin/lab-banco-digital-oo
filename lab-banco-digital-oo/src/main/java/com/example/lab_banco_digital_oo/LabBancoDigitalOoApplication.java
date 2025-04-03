@@ -107,8 +107,31 @@ public class LabBancoDigitalOoApplication {
 						break;
 					}
 					break;
+
+				case 4:
+					System.out.println("=== Depositar ===");
+					System.out.println("Digite o nome do banco:");
+					String bancoDepositoNome = scanner.next();
+					Banco bancoDeposito = sistemaBancario.getBancoPorNome(bancoDepositoNome);
+
+					if (bancoDeposito != null) {
+						System.out.println("Digite o número da conta:");
+						int numeroContaDeposito = scanner.nextInt();
+						Conta contaDeposito = bancoDeposito.getContaPorNumero(numeroContaDeposito);
+						if (contaDeposito != null) {
+							System.out.println("Digite o valor a ser depositado:");
+							double valorDeposito = scanner.nextDouble();
+							contaDeposito.depositar(valorDeposito);
+							System.out.println("Depósito realizado com sucesso!");
+						} else {
+							System.out.println("Conta não encontrada.");
+						}
+					} else {
+						System.out.println("Banco não encontrado.");
+
+					}
+
 				default:
-					scanner.close();
 
 					break;
 			}
