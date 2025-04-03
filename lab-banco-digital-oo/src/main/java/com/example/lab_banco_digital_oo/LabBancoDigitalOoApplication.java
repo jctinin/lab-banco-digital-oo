@@ -10,20 +10,16 @@ public class LabBancoDigitalOoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LabBancoDigitalOoApplication.class, args);
-
-		System.out.println("=== Banco Digital ===");
-		System.out.println("=== Digite (1) para continuar ===");
-
+		SistemaBancario sistemaBancario = new SistemaBancario();
 		Scanner scanner = new Scanner(System.in);
-		int opcao = scanner.nextInt();
 
-		while (opcao!= 8) {
+		while (true) {
 			System.out.println("=== Menu ===");
 
-			System.out.println("0 - Criar Banco");
-			System.out.println("1 - Criar Conta Corrente");
-			System.out.println("2 - Criar Conta Poupança");
-			System.out.println("3 - Listar Contas");
+			System.out.println("0 - Cadastrar Banco");
+			System.out.println("1 - Cadastrar Conta Corrente");
+			System.out.println("2 - Cadastrar Conta Poupança");
+			System.out.println("3 - Listar Contas por Banco");
 			System.out.println("4 - Depositar");
 			System.out.println("5 - Sacar");
 			System.out.println("6 - Transferir");
@@ -36,28 +32,92 @@ public class LabBancoDigitalOoApplication {
 					System.out.println("=== Criar Banco ===");
 					System.out.println("Digite o nome do banco:");
 					String nomeBanco = scanner.next();
-					Banco banco = new Banco();
-					banco.setNome(nomeBanco);
-					System.out.println("Banco " + banco.getNome() + " criado com sucesso!");
+					sistemaBancario.addBanco(new Banco(nomeBanco));
+					System.out.println("Banco " + nomeBanco + " criado com sucesso!");
 					break;
 
 				case 1:
-					System.out.println("=== Criar Conta Corrente ===");
+					System.out.println("=== Cadastrar Conta Corrente ===");
 					System.out.println("Digite o nome do cliente:");
 					String nomeCliente = scanner.next();
 					Cliente cliente = new Cliente();
 					cliente.setNome(nomeCliente);
-					Conta contaCorrente = new ContaCorrente(cliente);
-					banco.getContas().add(contaCorrente);
-					System.out.println("Conta Corrente criada com sucesso para " + cliente.getNome() + "!");
-					
+					System.out.println("Digite o nome do banco:");
+					String bancoNome = scanner.next();
+					Banco banco = sistemaBancario.getBancoPorNome(bancoNome);
+					if (banco == null) {
+						System.out.println("Banco não encontrado. Realizando cadastro de Banco.");
+						Banco novoBanco = new Banco(bancoNome);
+						sistemaBancario.addBanco(novoBanco);
+						banco = novoBanco;
+						System.out.println("Banco " + bancoNome + " criado com sucesso!");
+						System.out.println("Criando conta corrente para o cliente " + nomeCliente);
+
+						Conta contaCorrente = new Conta(cliente);
+						banco.addContas(contaCorrente);
+						contaCorrente.setAgencia(1);
+						contaCorrente.setNumero(1);
+						contaCorrente.setSaldo(200);
+						contaCorrente.setCliente(cliente);
+						contaCorrente.setNomeBanco(banco.getNome());
+						banco.addClientes(cliente);
+
+					} else {
+
+						Conta contaCorrente = new Conta(cliente);
+						banco.addContas(contaCorrente);
+						contaCorrente.setAgencia(1);
+						contaCorrente.setNumero(1);
+						contaCorrente.setSaldo(200);
+						contaCorrente.setCliente(cliente);
+						contaCorrente.setNomeBanco(banco.getNome());
+						banco.addClientes(cliente);
+
+						break;
+					}
+
+					break;
+				case 2:
+					System.out.println("=== Cadastrar Conta Poupança ===");
+					System.out.println("Digite o nome do cliente:");
+					String nomeClientePoupanca = scanner.next();
+					Cliente clientePoupanca = new Cliente();
+					clientePoupanca.setNome(nomeClientePoupanca);
+					System.out.println("Digite o nome do banco:");
+					String bancoNomePoupanca = scanner.next();
+					Banco bancoPoupanca = sistemaBancario.getBancoPorNome(bancoNomePoupanca);
+					if (bancoPoupanca != null) {
+						bancoPoupanca.addClientes(clientePoupanca);
+					} else {
+						System.out.println("Banco não encontrado.");
+						break;
+					}
+
+					break;
+				case 3:
+					System.out.println("=== Listar Contas ===");
+					System.out.println("Digite o nome do banco:");
+					String bancoListarNome = scanner.next();
+
+					Banco bancoListar = sistemaBancario.getBancoPorNome(bancoListarNome);
+					if (bancoListar != null) {
+						bancoListar.listarContas();
+					} else {
+						System.out.println("Banco não encontrado.");
+						break;
+					}
 					break;
 				default:
+					scanner.close();
+
 					break;
 			}
+
 		}
 
+	}
 
+	public void cadastroBancario() {
 
 	}
 

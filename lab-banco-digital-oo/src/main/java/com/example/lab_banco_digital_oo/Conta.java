@@ -1,6 +1,9 @@
 package com.example.lab_banco_digital_oo;
 
-public abstract class Conta implements IConta {
+import lombok.Data;
+
+@Data
+public class Conta implements IConta {
 
 	private static final int AGENCIA_PADRAO = 1;
 	private static int SEQUENCIAL = 1;
@@ -9,6 +12,7 @@ public abstract class Conta implements IConta {
 	protected int numero;
 	protected double saldo;
 	protected Cliente cliente;
+	protected String nomeBanco;
 
 	public Conta(Cliente cliente) {
 		this.agencia = Conta.AGENCIA_PADRAO;
@@ -49,5 +53,23 @@ public abstract class Conta implements IConta {
 		System.out.println(String.format("Agencia: %d", this.agencia));
 		System.out.println(String.format("Numero: %d", this.numero));
 		System.out.println(String.format("Saldo: %.2f", this.saldo));
+	}
+
+	@Override
+	public void imprimirExtrato() {
+		System.out.println("=== Extrato da conta ===");
+		imprimirInfosComuns();
+		System.out.println("=== Fim do extrato ===");
+	}
+
+	@Override
+	public String toString() {
+		return "Conta{" +
+				"agencia=" + agencia +
+				", numero=" + numero +
+				", saldo=" + saldo +
+				", cliente=" + cliente.getNome() +
+				", nomeBanco='" + nomeBanco + '\'' +
+				'}';
 	}
 }
