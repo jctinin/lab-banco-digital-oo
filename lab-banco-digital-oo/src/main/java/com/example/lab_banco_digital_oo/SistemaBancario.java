@@ -20,9 +20,23 @@ public class SistemaBancario {
   }
 
   public Banco getBancoPorNome(String nome) {
+
+    return bancos.stream()
+        .filter(banco -> banco.getNome().equalsIgnoreCase(nome))
+        .findFirst()
+        .orElse(null);
+
+  }
+
+  public Conta getContaPorNumero(int numeroContaSacar) {
     for (Banco banco : bancos) {
-      if (banco.getNome().equalsIgnoreCase(nome)) {
-        return banco;
+      for (Conta conta : banco.getContas()) {
+        if (conta.getAgencia() == Conta.AGENCIA_PADRAO && conta.getNumero() == numeroContaSacar) {
+          return conta;
+        } else {
+          System.out.println("Conta não encontrada.");
+          break;
+        }
       }
     }
     return null;
