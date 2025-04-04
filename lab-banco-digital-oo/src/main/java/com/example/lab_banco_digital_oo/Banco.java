@@ -24,10 +24,13 @@ public class Banco {
 
 	public void listarContas() {
 		System.out.println("=== Contas do banco " + this.nome + " ===");
-		for (Conta conta : contas) {
-			System.out.println(conta);
-		}
-		System.out.println();
+		contas.stream()
+				.forEach(conta -> System.out.println(conta));
+
+		// for (Conta conta : contas) {
+		// 	System.out.println(conta);
+		// }
+		// System.out.println();
 	}
 
 	public void addClientes(Cliente cliente) {
@@ -36,15 +39,15 @@ public class Banco {
 
 	public Conta getContaPorNumero(int numeroContaDeposito) {
 
-		for (Conta conta : contas) {
-
-			if (conta.getAgencia() == Conta.AGENCIA_PADRAO && conta.getNumero() == numeroContaDeposito) {
-				return conta;
-			} else {
-				System.out.println("Conta não encontrada.");
-			}
-		}
-		return null;
+		return contas.stream()
+				.filter(conta -> conta.getAgencia() == Conta.AGENCIA_PADRAO && conta.getNumero() == numeroContaDeposito)
+				.findFirst().orElse(null);
 
 	}
+
+	// @Override
+	// public String toString() {
+	// 	return "Banco [nome=" + nome + ", contas=" + contas + ", clientes=" + clientes + "]";
+	// }
+
 }
